@@ -11,7 +11,7 @@ USAGE:
     1) Define all the required variables
     2) Instantiate a BlobServiceClient for the Container
     3) Instantiate a ContainerClient for the Container
-    4) Instantiate a ContainerClient for Immutability Policy implementation
+    4) Instantiate a StorageManagementClient for Immutability Policy implementation
 """
 
 from azure.core.exceptions import ResourceExistsError, HttpResponseError
