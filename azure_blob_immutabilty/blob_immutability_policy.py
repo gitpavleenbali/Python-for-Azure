@@ -1,3 +1,19 @@
+# -------------------------------------------------------------------------
+# Copyright (c) gitpavleenbali
+# --------------------------------------------------------------------------
+
+"""
+FILE: blob_immutability_policy.py
+DESCRIPTION:
+    This sample demonstrates container operations for enabling blob data immutabilty policy for business-critical data.
+USAGE:
+    Define the required utilities for the current workflow
+    1) Define all the required variables
+    2) Instantiate a BlobServiceClient for the Container
+    3) Instantiate a ContainerClient for the Container
+    4) Instantiate a ContainerClient for Immutability Policy implementation
+"""
+
 from azure.core.exceptions import ResourceExistsError, HttpResponseError
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobClient, BlobServiceClient, ContainerClient
@@ -48,7 +64,7 @@ class container_immutability():
         # Read the content of the file of the blob before immutability workflow
         pre_workflow = read_blob_content('pre_workflow')
 
-        # Instantiate a ContainerClient for Immutability [Azure-Preview]
+        # Instantiate a ContainerClient for Immutability
         container_client_immutability = StorageManagementClient(
             credential=_get_credential(),
             subscription_id='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', # Please enter Your Subscription ID
