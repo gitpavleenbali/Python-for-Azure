@@ -66,7 +66,7 @@ class container_immutability():
             print(e)
             pass
 
-        # Try to delete the container to validate Protection Layer I & II
+        # Try to delete the container to validate Layer-I Protection 
         try:
             container_client_blob.delete_container()
         except ResourceExistsError as e:
