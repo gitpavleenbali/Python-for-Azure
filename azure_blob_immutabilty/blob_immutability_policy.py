@@ -51,7 +51,7 @@ class container_immutability():
         # Instantiate a ContainerClient for Immutability [Azure-Preview]
         container_client_immutability = StorageManagementClient(
             credential=_get_credential(),
-            subscription_id='3cd5564f-8ad7-4f1e-8f46-4e8a9d3c8290',
+            subscription_id='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', # Please enter Your Subscription ID
             base_url="https://management.azure.com"
 
         )
