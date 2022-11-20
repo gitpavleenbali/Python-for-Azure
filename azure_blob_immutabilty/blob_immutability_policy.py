@@ -5,7 +5,7 @@
 """
 FILE: blob_immutability_policy.py
 DESCRIPTION:
-    This sample demonstrates container operations for enabling blob data immutabilty policy for business-critical data.
+    This sample demonstrates container operations for enabling blob data immutability policy for business-critical data.
 USAGE:
     Define the required utilities for the current workflow
     1) Define all the required variables
