@@ -1,0 +1,59 @@
+# Main pipeline
+schedules:
+ - cron: "0 8 * * *"                # Schedule the pipeline to run daily morning at 08:00 AM
+   displayName: Daily Morning Check
+   branches:
+     include:
+     - main
+
+stages:
+  - stage:
+    displayName: Deploy Dynamic Cost Analysis & Alert (DCAA)
+    jobs:
+      - job:
+        displayName: DCAA
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          - task: UsePythonVersion@0
+            displayName: Python Version
+            inputs:
+              versionSpec: 3.8
+
+          - bash: |
+              pip install --upgrade pip
+              pip install -r requirements.txt
+            displayName: Dependencies
+            failOnStderr: true
+
+          - task: AzureCLI@2
+            displayName: Result-RG-DCAA
+            inputs:
+              azureSubscription: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/'
+              failOnStandardError: true
+              inlineScript: |
+                python src/RG_DCAA.py
+
+          - task: AzureCLI@2
+            displayName: Result-SUB-DCAA
+            inputs:
+              azureSubscription: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/'
+              failOnStandardError: true
+              inlineScript: |
+                python src/SUB_DCAA.py
+
+          - bash: |
+              git config user.email ${BUILD_REQUESTEDFORMAIL}
+              git config user.name ${BUILD_REQUESTEDFOR}
+              git init
+              git add .
+              git commit -m "Update Result Files"
+              git push --force-with-lease origin HEAD:main
+            displayName: Commit-Changes

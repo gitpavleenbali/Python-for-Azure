@@ -1,6 +1,23 @@
+# -------------------------------------------------------------------------
+# Copyright (c) gitpavleenbali
+# --------------------------------------------------------------------------
+
+"""
+FILE: RG_DCAA.py
+DESCRIPTION:
+    This sample demonstrates container operations for enabling blob data immutability policy for business-critical data.
+USAGE:
+    Define the required utilities for the current workflow
+    1) Define all the required variables
+    2) Instantiate "_get_credential()" method via DefaultAzureCredential
+    3) Instantiate the CostManagementClient
+    4) Instantiate the "get_query_definition" method
+    5) Instantiate the "query_definition" object for calculating last-week cost, this-week cost & total-current cost
+
+"""
+
 import csv, logging, sys
 import tabulate
-import os.path
 from time import sleep
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.costmanagement import CostManagementClient
@@ -17,8 +34,6 @@ Sub_ID_List = []
 result_file = open('../result/result_RG_DCAA.txt', 'w')
 result_file.close()
 filename = open('../utility/RG_List.csv', 'r')
-# # Local-Debug
-# filename = open('.../utility/csv_files/az_rg_list_airdp.csv', 'r')
 file = csv.DictReader(filename)
 
 for rg in file:
@@ -54,7 +69,7 @@ def main():
 
         percent_fraction = (((this_week_cost / last_week_cost) - 1) * 100)
 
-        data = [[date, "Azure Weekly-Cost", "Airline-Data-Platform", "RG with '-mesh' suffix", total_current_cost, last_week_cost,
+        data = [[date, "Azure Weekly-Cost", "Azure Subscription for Demo", "RG with tag 'demo:psbali'", total_current_cost, last_week_cost,
                  this_week_cost, percent_fraction]]
 
         # define header names
@@ -64,7 +79,6 @@ def main():
         # display table
         cost_table = tabulate.tabulate(data, headers=col_names, tablefmt="fancy_grid")
         print(cost_table)
-        # cost_table_html = tabulate.tabulate(data, headers=col_names, tablefmt="html")
 
         with open('../result/result_RG_DCAA.txt', 'a', encoding='utf-8') as file:
             file.write(cost_table)

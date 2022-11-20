@@ -1,3 +1,21 @@
+# -------------------------------------------------------------------------
+# Copyright (c) gitpavleenbali
+# --------------------------------------------------------------------------
+
+"""
+FILE: SUB_DCAA.py
+DESCRIPTION:
+    This sample demonstrates container operations for enabling blob data immutability policy for business-critical data.
+USAGE:
+    Define the required utilities for the current workflow
+    1) Define all the required variables
+    2) Instantiate "_get_credential()" method via DefaultAzureCredential
+    3) Instantiate the CostManagementClient
+    4) Instantiate the "get_query_definition" method
+    5) Instantiate the "query_definition" object for calculating last-week cost, this-week cost & total-current cost
+
+"""
+
 import csv, logging, sys
 import tabulate
 from time import sleep
@@ -11,13 +29,10 @@ date = today.strftime("%B %d, %Y")
 
 # threshold-value in percentage
 threshold = 20
-
 Sub_Name_List = []
 Sub_ID_List = []
-
 result_file = open('../result/result_SUB_DCAA.txt', 'w')
 result_file.close()
-
 filename = open('../utility/SUB_ID.csv', 'r')
 file = csv.DictReader(filename)
 
@@ -60,19 +75,17 @@ def main():
             percent_fraction = (((this_week_cost / last_week_cost) - 1) * 100)
             fraction_values.append(percent_fraction)
 
-            data = [date, "Azure Weekly-Cost", j, "RG with tag value 'BDP-Mesh'", total_current_cost, last_week_cost,
+            data = [date, "Azure Weekly-Cost", j, total_current_cost, last_week_cost,
                      this_week_cost, percent_fraction]
             tabular_result.append(data)
 
         # define header names
-        col_names = ["Date", "Type", "Subscription", "Azure-Resource", "This-Month Amount (€)",
+        col_names = ["Date", "Type", "Subscription", "This-Month Amount (€)",
                      "Last-Week Amount (€)", "This-Week Amount (€)", "% Utilization compared to Last-Week"]
 
         # display table
         cost_table = tabulate.tabulate(tabular_result, headers=col_names, tablefmt="fancy_grid")
         print(cost_table)
-        ## For html based result-dashboard in future
-        # cost_table_html = tabulate.tabulate(data, headers=col_names, tablefmt="html")
 
         with open('../result/result_SUB_DCAA.txt', 'a', encoding='utf-8') as file:
             file.write(cost_table)
@@ -99,7 +112,6 @@ def _get_credential() -> DefaultAzureCredential:
 def get_query_definition(value) -> QueryDefinition:
     query_dataset = QueryDataset(
         granularity="weekly",
-        #filter=QueryFilter(tags=QueryComparisonExpression(name="demo", operator="In", values=["psbali"])),
         aggregation={"totalCost": QueryAggregation(name="PreTaxCost", function="Sum")}
     )
     return QueryDefinition(type="Usage", timeframe=value, dataset=query_dataset)
