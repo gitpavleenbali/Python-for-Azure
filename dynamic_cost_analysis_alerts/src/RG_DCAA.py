@@ -5,7 +5,9 @@
 """
 FILE: RG_DCAA.py
 DESCRIPTION:
-    This sample demonstrates container operations for enabling blob data immutability policy for business-critical data.
+    This project helps to generate "Alerts in case of significant cost increase in Azure" and
+    to detect "Sudden high utilization-spikes for resources in Azure cloud-infrastructure"
+
 USAGE:
     Define the required utilities for the current workflow
     1) Define all the required variables
