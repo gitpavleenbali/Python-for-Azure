@@ -70,7 +70,7 @@ class data_purge_lcm_poliy():
 
         )
 
-        # Create Data Lifecycle Management Policy for Automated Access-Tier & Purge of Data
+        # Create Data Lifecycle Management Policy for Automated Access-Tier & Purge of the Data
         management_policy = container_client.management_policies.create_or_update(
             rgName,
             staName,
