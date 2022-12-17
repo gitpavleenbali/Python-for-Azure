@@ -100,7 +100,7 @@ class data_purge_lcm_poliy():
                                             "days_after_modification_greater_than": "300"
                                         },
                                         # This is to purge data based on the rule specified
-                                        "delete": {                                                    #
+                                        "delete": {
                                             "days_after_modification_greater_than": "600"
                                         }
                                     },
