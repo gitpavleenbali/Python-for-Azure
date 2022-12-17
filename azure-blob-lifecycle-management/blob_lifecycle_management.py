@@ -70,7 +70,7 @@ class data_purge_lcm_poliy():
 
         )
 
-        # Create Data Lifecycle Management Policy for Automated Access-Tier & Purge of Data
+        # Create Data Lifecycle Management Policy for Automated Access-Tier & Purge of the Data
         management_policy = container_client.management_policies.create_or_update(
             rgName,
             staName,
@@ -88,19 +88,19 @@ class data_purge_lcm_poliy():
                                         "blockBlob"
                                     ],
                                     "prefix_match": [
-                                        "container-imt/blob-01"
+                                        "container-lcm-purge"
                                     ]
                                 },
                                 "actions": {
                                     "base_blob": {
                                         "tier_to_cool": {
-                                            "days_after_modification_greater_than": "200"
+                                            "days_after_modification_greater_than": "150"
                                         },
                                         "tier_to_archive": {
-                                            "days_after_modification_greater_than": "400"
+                                            "days_after_modification_greater_than": "300"
                                         },
                                         # This is to purge data based on the rule specified
-                                        "delete": {                                                    #
+                                        "delete": {
                                             "days_after_modification_greater_than": "600"
                                         }
                                     },
