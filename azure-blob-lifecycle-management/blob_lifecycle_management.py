@@ -88,16 +88,16 @@ class data_purge_lcm_poliy():
                                         "blockBlob"
                                     ],
                                     "prefix_match": [
-                                        "container-imt/blob-01"
+                                        "container-lcm-purge"
                                     ]
                                 },
                                 "actions": {
                                     "base_blob": {
                                         "tier_to_cool": {
-                                            "days_after_modification_greater_than": "200"
+                                            "days_after_modification_greater_than": "150"
                                         },
                                         "tier_to_archive": {
-                                            "days_after_modification_greater_than": "400"
+                                            "days_after_modification_greater_than": "300"
                                         },
                                         # This is to purge data based on the rule specified
                                         "delete": {                                                    #
