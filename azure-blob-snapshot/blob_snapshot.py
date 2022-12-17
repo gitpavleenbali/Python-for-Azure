@@ -56,7 +56,7 @@ class blob_snapshot():
 
         # Create a new Blob & Upload a dummy-file to the BLOB
         try:
-            with open("utils/snapshot_blob.txt", "rb") as blob_file:
+            with open("snapshot_blob.txt", "rb") as blob_file:
                 _blob_client().upload_blob(data=blob_file)
         except ResourceExistsError:
             pass
@@ -69,7 +69,7 @@ class blob_snapshot():
         # Instantiate a ContainerClient for Blob
         container_client_snapshot = StorageManagementClient(
             credential=_get_credential(),
-            subscription_id='4de57da5-98b6-4452-905b-7aa96bcfec50',
+            subscription_id='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', # Please enter Your Subscription ID
             base_url="https://management.azure.com"
 
         )
