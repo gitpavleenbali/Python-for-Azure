@@ -1,3 +1,19 @@
+# -------------------------------------------------------------------------
+# Copyright (c) gitpavleenbali
+# --------------------------------------------------------------------------
+
+"""
+FILE: blob_container_inventory.py
+DESCRIPTION:
+    This sample demonstrates how to create a customized blob container inventory for your blob storage using Python SDK for Azure. This tool
+    helps to list important details like blob container name, its totla size and the name and size of each individual blob file in it.
+USAGE:
+    Define the required utilities for the current workflow
+    1) Define all the required variables
+    2) Instantiate a BlobServiceClient for the Storage-Account
+    3) Create a workflow that suffices the current use-case as mentioned in the Description'
+"""
+
 from azure.storage.blob import BlobServiceClient
 from azure.identity import DefaultAzureCredential
 
