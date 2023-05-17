@@ -69,6 +69,12 @@ class blob_container_inventory():
             print("Total Size of the Blob Container: " + str(total_container_size) + " bytes")
             print('-' * 100)
 
+            # Convert total_size to a string
+            total_container_size_str = str(total_container_size)
+
+            # Set the total_size as metadata for the blob container
+            blob_container_client.set_container_metadata(metadata={'total_size': total_container_size_str + " bytes"})
+
         print()
 
 def _get_credential() -> DefaultAzureCredential:
