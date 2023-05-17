@@ -10,8 +10,9 @@ DESCRIPTION:
 USAGE:
     Define the required utilities for the current workflow
     1) Define all the required variables
-    2) Instantiate a BlobServiceClient for the Storage-Account
-    3) Create a workflow that suffices the current use-case as mentioned in the Description'
+    2) Instantiate 'credentia' method for authentication via Default Credential
+    3) Instantiate a BlobServiceClient for the Storage-Account
+    4) Create a workflow that suffices the current use-case as mentioned in the Description
 """
 
 from azure.storage.blob import BlobServiceClient
