@@ -10,8 +10,9 @@ DESCRIPTION:
 USAGE:
     Define the required utilities for the current workflow
     1) Define all the required variables
-    2) Instantiate a BlobServiceClient for the Storage-Account
-    3) Create a workflow that suffices the current use-case as mentioned in the Description'
+    2) Instantiate 'credentia' method for authentication via Default Credential
+    3) Instantiate a BlobServiceClient for the Storage-Account
+    4) Create a workflow that suffices the current use-case as mentioned in the Description
 """
 
 from azure.storage.blob import BlobServiceClient
@@ -68,6 +69,12 @@ class blob_container_inventory():
             print('-' * 100)
             print("Total Size of the Blob Container: " + str(total_container_size) + " bytes")
             print('-' * 100)
+
+            # Convert total_size to a string
+            total_container_size_str = str(total_container_size)
+
+            # Set the total_size as metadata for the blob container
+            blob_container_client.set_container_metadata(metadata={'total_size': total_container_size_str + " bytes"})
 
         print()
 
