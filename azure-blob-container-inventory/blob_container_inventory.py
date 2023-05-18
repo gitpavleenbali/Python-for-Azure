@@ -70,11 +70,12 @@ class blob_container_inventory():
             print("Total Size of the Blob Container: " + str(total_container_size) + " bytes")
             print('-' * 100)
 
-            # Convert total_size to a string
+            # Convert to a string
             total_container_size_str = str(total_container_size)
+            blob_count_str = str(blob_count)
 
-            # Set the total_size as metadata for the blob container
-            blob_container_client.set_container_metadata(metadata={'total_size': total_container_size_str + " bytes"})
+            # Set the total_size & total number of blob-files as metadata for the blob container
+            blob_container_client.set_container_metadata(metadata={'total_size': total_container_size_str + " bytes", 'total_blob_files': blob_count_str})
 
         print()
 
