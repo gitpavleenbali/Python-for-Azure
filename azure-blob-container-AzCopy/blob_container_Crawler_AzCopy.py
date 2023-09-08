@@ -3,9 +3,10 @@ from azure.identity import ClientSecretCredential
 import os, subprocess
 
 # Declare all the variables required for the workflow
-source_storage_account = "checkwithcharlie"
-destination_storage_account = "testwithcharly2"
+source_storage_account = "st1awesteuautanadev001"
+destination_storage_account = "st1awesteuautanadev002"
 keyword = "azcopy"
+print("The filter-keyword used for identifying specific dataset is: " + keyword)
 destination_container_name = "destination-azcopy"
 service_principal_app_id = "c18d8674-0c22-411d-aa05-c96929a03cbe"
 tenant_id = "d3bc2180-cb1e-40f7-b59a-154105743342"
@@ -37,13 +38,14 @@ def find_containers_by_keyword(source_storage_account, keyword, service_principa
     for container in blob_service_client.list_containers():
         if keyword in container['name']:
             container_names.append(container['name'])
-    print(container_names)
+    print("Filtered Containers are:")
+    for name in container_names:
+        print(name)
     return container_names
 
 def copy_data_between_containers(source_storage_account, destination_storage_account, source_container_names, destination_container_name):
     # Use AzCopy to copy data from the source to the destination container for each matching source container
     for source_container_name in source_container_names:
-        print(source_container_name)
         azcopy_command = azcopy_command_template.format(
                 source_storage_account, source_container_name, destination_storage_account, destination_container_name)
         try:
