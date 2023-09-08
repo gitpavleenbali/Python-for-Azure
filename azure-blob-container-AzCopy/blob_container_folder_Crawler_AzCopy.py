@@ -18,10 +18,9 @@ os.environ['AZCOPY_AUTO_LOGIN_TYPE'] = 'SPN'
 os.environ['AZCOPY_SPA_APPLICATION_ID'] = service_principal_app_id
 os.environ['AZCOPY_TENANT_ID'] = tenant_id
 os.environ['AZCOPY_SPA_CLIENT_SECRET'] = client_secret
-
-# Define your AzCopy command template
-azcopy_command_template = 'azcopy copy "https://{}.blob.core.windows.net/{}" "https://{}.blob.core.windows.net/{}" ' \
-                          '--recursive=true'
+# Increase the performance of AzCopy
+os.environ['AZCOPY_CONCURRENCY_VALUE'] = '80'
+os.environ['AZCOPY_BUFFER_GB'] = '8'
 
 
 # Create Credentials
@@ -39,6 +38,10 @@ def get_client_secret_credential(service_principal_app_id,
 # Get the client secret credential
 workflow_credential = get_client_secret_credential(service_principal_app_id,
                                                    tenant_id, client_secret)
+
+# Define your AzCopy command template
+azcopy_command_template = 'azcopy copy "https://{}.blob.core.windows.net/{}" "https://{}.blob.core.windows.net/{}" ' \
+                          '--recursive=true --block-size-mb=16 --log-level=INFO --overwrite=ifSourceNewer'
 
 
 def find_containers_by_keyword(source_storage_account, dataset_keyword):
