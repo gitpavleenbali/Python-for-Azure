@@ -4,7 +4,7 @@ import os, subprocess
 
 # Declare all the variables required for the workflow
 source_storage_account = "checkwithcharlie"
-destination_storage_account = "testwithcharly2 "
+destination_storage_account = "testwithcharly2"
 keyword = "azcopy"
 destination_container_name = "destination-azcopy"
 service_principal_app_id = "c18d8674-0c22-411d-aa05-c96929a03cbe"
@@ -16,6 +16,9 @@ os.environ['AZCOPY_AUTO_LOGIN_TYPE'] = 'SPN'
 os.environ['AZCOPY_SPA_APPLICATION_ID'] = service_principal_app_id
 os.environ['AZCOPY_TENANT_ID'] = tenant_id
 os.environ['AZCOPY_SPA_CLIENT_SECRET'] = client_secret
+
+# Define your AzCopy command template
+azcopy_command_template = 'azcopy copy "https://{}.blob.core.windows.net/{}" "https://{}.blob.core.windows.net/{}" --recursive=true'
 
 def find_containers_by_keyword(source_storage_account, keyword, service_principal_app_id, tenant_id, client_secret):
     # Create a client secret credential using the provided details
@@ -34,13 +37,15 @@ def find_containers_by_keyword(source_storage_account, keyword, service_principa
     for container in blob_service_client.list_containers():
         if keyword in container['name']:
             container_names.append(container['name'])
-
+    print(container_names)
     return container_names
 
 def copy_data_between_containers(source_storage_account, destination_storage_account, source_container_names, destination_container_name):
     # Use AzCopy to copy data from the source to the destination container for each matching source container
     for source_container_name in source_container_names:
-        azcopy_command = f"azcopy copy 'https://{source_storage_account}.blob.core.windows.net/{source_container_name}' 'https://{destination_storage_account}.blob.core.windows.net/{destination_container_name}' --recursive=true"
+        print(source_container_name)
+        azcopy_command = azcopy_command_template.format(
+                source_storage_account, source_container_name, destination_storage_account, destination_container_name)
         try:
             subprocess.run(azcopy_command, shell=True, check=True)
             print(f"Data transfer completed successfully from {source_container_name} to {destination_container_name}")
