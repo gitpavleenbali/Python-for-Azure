@@ -8,10 +8,10 @@ source_storage_account = "st1awesteuautanadev001"
 destination_storage_account = "st1awesteuautanadev002"
 dataset_keyword = "azcopy"
 print("The filter-keyword used for identifying specific dataset is: " + dataset_keyword)
-destination_container_name = "destination-azcopy"
+destination_container_name = "destination-azcopy/incoming-adds"
 service_principal_app_id = "c18d8674-0c22-411d-aa05-c96929a03cbe"
 tenant_id = "d3bc2180-cb1e-40f7-b59a-154105743342"
-client_secret = "c7P8Q~_D1O1PpSGK6AVTL3JkTzFn9txT.6aNSa2v"
+client_secret = ""
 
 # Set the AzCopy environment variables for service principal authentication
 os.environ['AZCOPY_AUTO_LOGIN_TYPE'] = 'SPN'
@@ -19,8 +19,8 @@ os.environ['AZCOPY_SPA_APPLICATION_ID'] = service_principal_app_id
 os.environ['AZCOPY_TENANT_ID'] = tenant_id
 os.environ['AZCOPY_SPA_CLIENT_SECRET'] = client_secret
 # Increase the performance of AzCopy
-os.environ['AZCOPY_CONCURRENCY_VALUE'] = '80'
-os.environ['AZCOPY_BUFFER_GB'] = '8'
+os.environ['AZCOPY_CONCURRENCY_VALUE'] = '1000'
+#os.environ['AZCOPY_BUFFER_GB'] = '8'
 
 
 # Create Credentials
@@ -41,7 +41,7 @@ workflow_credential = get_client_secret_credential(service_principal_app_id,
 
 # Define your AzCopy command template
 azcopy_command_template = 'azcopy copy "https://{}.blob.core.windows.net/{}" "https://{}.blob.core.windows.net/{}" ' \
-                          '--recursive=true --block-size-mb=16 --log-level=INFO --overwrite=ifSourceNewer'
+                          '--recursive=true --block-size-mb=16 --log-level=Info --overwrite=ifSourceNewer'
 
 
 def find_containers_by_keyword(source_storage_account, dataset_keyword):
@@ -65,7 +65,7 @@ def copy_data_between_containers(source_storage_account, destination_storage_acc
     # Use AzCopy to copy data from the source to the destination container for each matching source container
     for source_container_name in source_container_names:
 
-        # If a folder keyword is provided, copy folders with the dataset_keyword
+        # If a folder keyword is provided, copy folders within the dataset_keyword
         if folder_keyword:
             def copy_folders_with_keyword():
                 # Create a blob service client using the client secret credential
@@ -90,7 +90,7 @@ def copy_data_between_containers(source_storage_account, destination_storage_acc
                     print("The name of the folder/directory getting copied is: " + folder_name)
                     azcopy_command = azcopy_command_template.format(
                         source_storage_account, f"{source_container_name}/{folder_name}", destination_storage_account,
-                        destination_container_name)
+                        f"{destination_container_name}/{dataset_keyword}")
 
                     try:
                         subprocess.run(azcopy_command, shell=True, check=True)
