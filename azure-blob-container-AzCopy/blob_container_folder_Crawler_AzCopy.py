@@ -4,13 +4,13 @@ import os, subprocess
 from azure.core.exceptions import ClientAuthenticationError  # Import ClientAuthenticationError
 
 # Declare all the variables required for the workflow
-source_storage_account = "st1awesteuautanadev001"
-destination_storage_account = "st1awesteuautanadev002"
+source_storage_account = ""
+destination_storage_account = ""
 dataset_keyword = "azcopy"
 print("The filter-keyword used for identifying specific dataset is: " + dataset_keyword)
-destination_container_name = "destination-azcopy/incoming-adds"
-service_principal_app_id = "c18d8674-0c22-411d-aa05-c96929a03cbe"
-tenant_id = "d3bc2180-cb1e-40f7-b59a-154105743342"
+destination_container_name = ""
+service_principal_app_id = ""
+tenant_id = ""
 client_secret = ""
 
 # Set the AzCopy environment variables for service principal authentication
