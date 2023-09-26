@@ -1,4 +1,4 @@
-from azure.identity import DefaultAzureCredential
+from azure.identity import ClientSecretCredential
 from azure.graphrbac import GraphRbacManagementClient
 
 # Replace with your Azure AD tenant ID, client ID, and client secret
@@ -15,7 +15,7 @@ threshold = 175
 class ServicePrincipalMembershipMonitor:
 
     def __init__(self):
-        self.credential = self._get_credential()
+        self.credential = ClientSecretCredential(tenant_id, client_id, client_secret)
         self.graph_client = GraphRbacManagementClient(self.credential, tenant_id)
 
     def main(self):
@@ -36,9 +36,6 @@ class ServicePrincipalMembershipMonitor:
 
         except Exception as e:
             print(f'Error: {str(e)}')
-
-    def _get_credential(self) -> DefaultAzureCredential:
-        return DefaultAzureCredential()
 
 if __name__ == "__main__":
     monitor = ServicePrincipalMembershipMonitor()
