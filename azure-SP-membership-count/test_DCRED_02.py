@@ -74,42 +74,58 @@ class ServicePrincipalMembershipMonitor:
             print(f'Error: {str(e)}')
             return []
 
-    from textwrap import wrap
-
+    # Declare the global variable
+    count_non_redundant_combined_SG = 0
     def display_security_groups(self, memberships, access_token):
+        global count_non_redundant_combined_SG  # Declare the variable as global
         try:
             # Create a list of lists for tabulate
             table_data = []
+            complete_group_name = []
+            complete_group_membership_names = []
 
-            for index, membership in enumerate(memberships, start=1):
+            for membership in memberships:
                 group_name = membership.get('displayName', 'N/A')
                 group_id = membership.get('id')
+                complete_group_name.append(group_name)
 
                 # Get the groups that the security group is a member of
                 group_memberships = self.get_group_memberships(group_id, access_token)
 
                 # Count the AAD Security-Group memberships and Group Memberships
-                aad_security_group_count = len(group_memberships)
                 group_membership_names = [group.get('displayName', 'N/A') for group in group_memberships]
-                group_membership_count = len(group_membership_names)
+                complete_group_membership_names.extend(group_membership_names)
+                complete_group_membership_names = list(set(complete_group_membership_names))  # Remove duplicates
 
-                # Calculate the total security group membership count
-                total_membership_count = aad_security_group_count + group_membership_count
+            # Calculate lengths
+            main_sg_count = len(complete_group_name)
+            nested_sg_count = len(complete_group_membership_names)
 
-                # Wrap cell content to prevent long lines
-                wrapped_group_name = "\n".join(textwrap.wrap(group_name, width=30))
-                wrapped_group_memberships = "\n".join(textwrap.wrap(", ".join(group_membership_names), width=30))
+            # Join the complete_group_name and complete_group_membership_names with commas
+            complete_group_name_str = ", ".join(complete_group_name)
+            complete_group_membership_names_str = ", ".join(complete_group_membership_names)
 
-                # Add a row with Service Principal name at the beginning and total membership count at the end
-                table_data.append([index, service_principal_name, wrapped_group_name, aad_security_group_count,
-                                   wrapped_group_memberships, group_membership_count, total_membership_count])
+            combined_SG = complete_group_name + complete_group_membership_names
+            non_redundant_combined_SG = list(set(combined_SG))
+            non_redundant_combined_SG_str = ", ".join(non_redundant_combined_SG)
+            count_non_redundant_combined_SG = len(non_redundant_combined_SG)
+
+            # Append data to the table
+            table_data.append([service_principal_name,
+                               "\n".join(textwrap.wrap(complete_group_name_str, width=30)),
+                               main_sg_count,
+                               "\n".join(textwrap.wrap(complete_group_membership_names_str, width=30)),
+                               nested_sg_count,
+                               "\n".join(textwrap.wrap(non_redundant_combined_SG_str, width=30)),
+                               count_non_redundant_combined_SG])
 
             # Define table headers
-            table_headers = ["S.No.", "Service Principal Name", "Main AAD Security-Groups (SGs)", "Main SGs Count",
-                             "Nested AAD Security-Group Memberships", "Nested SGs Group-Memberships Count", "Total combined SGs Count"]
+            table_headers = ["Service Principal Name", "Main AAD Security-Groups (SGs)", "Main AAD SGs Count",
+                             "Nested AAD SG Group-Memberships \n(No Duplicates)", "Nested AAD SGs Group-Memberships Count",
+                             "Total Unique AAD SGs", "Total combined SGs Count"]
 
             # Print the table using tabulate with a compact format
-            table = tabulate(table_data, headers=table_headers, tablefmt="pretty")
+            table = tabulate(table_data, headers=table_headers, tablefmt="pretty", numalign="center")
             print(table)
 
         except Exception as e:
@@ -138,10 +154,10 @@ class ServicePrincipalMembershipMonitor:
                 # Check if the count exceeds the threshold
                 if total_membership_count > threshold:
                     raise Exception(
-                        f"Alert: The Service-Principal's total AAD Security-Groups count of {total_membership_count} exceeds the safe-threshold limit of {threshold}.")
+                        f"Alert: The Service-Principal's total AAD Security-Groups count of {count_non_redundant_combined_SG} exceeds the safe-threshold limit of {threshold}.")
                 else:
                     print(
-                        f"Alert: The Service-Principal's total AAD Security-Groups count is {total_membership_count}, therefore it is within the safe-threshold limit of {threshold}.")
+                        f"Alert: The Service-Principal's total AAD Security-Groups count is {count_non_redundant_combined_SG}, therefore it is within the safe-threshold limit of {threshold}.")
 
         except Exception as e:
             print(f'Error: {str(e)}')
