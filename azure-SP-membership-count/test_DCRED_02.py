@@ -120,9 +120,9 @@ class ServicePrincipalMembershipMonitor:
                                count_non_redundant_combined_SG])
 
             # Define table headers
-            table_headers = ["Service Principal Name", "Main AAD Security-Groups (SGs)", "Main AAD SGs Count",
-                             "Nested AAD SG Group-Memberships \n(No Duplicates)", "Nested AAD SGs Group-Memberships Count",
-                             "Total Unique AAD SGs", "Total combined SGs Count"]
+            table_headers = ["Service Principal Name", "Main AAD Security-Groups (SGs)", "Main AAD SGs \n(Count)",
+                             "Nested AAD SG \nGroup-Memberships (No Duplicates)", "Nested AAD SGs \nGroup-Memberships (Count)",
+                             "Total Unique AAD SGs", "Total combined \nAAD SGs (Count)"]
 
             # Print the table using tabulate with a compact format
             table = tabulate(table_data, headers=table_headers, tablefmt="pretty", numalign="center")
