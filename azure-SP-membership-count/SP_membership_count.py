@@ -3,16 +3,11 @@ from azure.identity import DefaultAzureCredential
 from tabulate import tabulate
 import textwrap
 
-# Name of the Service Principal
+# Enter the details of the service principal
 service_principal_name = "Synapse Classic IAM"
-
-# Replace with your Azure AD tenant ID
-tenant_id = "d3bc2180-cb1e-40f7-b59a-154105743342"
-
-# Replace with the object ID of your service principal
 service_principal_object_id = '7372d8fd-b5a5-4d63-a5fe-0d594df80bf5'
 
-# Set the threshold
+# Set the threshold for AAD Security-Group Memberships
 threshold = 175
 
 class ServicePrincipalMembershipMonitor:
@@ -120,9 +115,9 @@ class ServicePrincipalMembershipMonitor:
                                count_non_redundant_combined_SG])
 
             # Define table headers
-            table_headers = ["Service Principal Name", "Main AAD Security-Groups (SGs)", "Main AAD SGs \n(Count)",
-                             "Nested AAD SG \nGroup-Memberships (No Duplicates)", "Nested AAD SGs \nGroup-Memberships (Count)",
-                             "Total Unique AAD SGs", "Total combined \nAAD SGs (Count)"]
+            table_headers = ["Service Principal Name", "Main AAD Security-Groups \n(SGs)", "Main AAD SGs \n(Count)",
+                             "Nested AAD SG \nGroup-Memberships \n(No Duplicates)", "Nested AAD SGs \nGroup-Memberships \n(Count)",
+                             "Total Unique AAD SGs", "Total combined \nAAD SGs \n(Count)"]
 
             # Print the table using tabulate with a compact format
             table = tabulate(table_data, headers=table_headers, tablefmt="pretty", numalign="center")
