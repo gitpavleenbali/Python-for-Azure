@@ -46,7 +46,7 @@ def _get_credential() -> DefaultAzureCredential:
     )
 
 if __name__ == "__main__":
-    keyword_filter = "data"  # Replace "data" with your desired keyword like bdp or mesh
+    keyword_filter = "data"  # Replace "data" with your desired keyword
     matching_subscriptions = get_subscriptions_with_keyword(keyword_filter)
 
     if not matching_subscriptions:
